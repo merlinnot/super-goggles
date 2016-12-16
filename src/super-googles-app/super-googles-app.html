@@ -1,0 +1,114 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+
+<dom-module id="super-googles-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      iron-list {
+        padding-top: 64px;
+        --iron-list-items-container: {
+          max-width: 800px;
+          margin: auto;
+          margin-top: 60px;
+          margin-bottom: 60px;
+          border-bottom: 1px solid #ddd;
+        };
+      }
+
+      .item {
+        @apply(--layout-horizontal);
+        padding: 20px;
+        background-color: white;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        margin-bottom: 10px;
+      }
+
+      .avatar {
+        height: 40px;
+        width: 40px;
+        border-radius: 20px;
+        box-sizing: border-box;
+        background-color: #DDD;
+      }
+
+      .longText {
+        color: gray;
+        display: none;
+      }
+
+      .item.expanded .longText {
+        display: block;
+      }
+    </style>
+    
+    <firebase-app auth-domain=""
+        database-url=""
+        api-key="">
+    </firebase-app>
+
+    <firebase-auth ></firebase-auth>
+
+    <firebase-query path="/organizations/-KXekytkPTS-p_goZ7NW/simCards"
+      data="{{data}}">
+    </firebase-query>
+
+    <iron-list id="list" items="{{data}}" as="d" selection-enabled multi-selection>
+      <template>
+        <div>
+          <div class$="[[getClassForItem(d, selected)]]" tabindex$="[[tabIndex]]">
+            <div class="pad">
+              <div class="primary">[[d.$key]]</div>
+              <div class="shortText">CardNumber: [[d.cardNumber]]</div>
+              <div class="longText">
+                <paper-input label="test-input" value="{{d.carrier}}"></paper-input>
+                <paper-spinner active></paper-spinner>
+                <paper-spinner active></paper-spinner>
+                <paper-spinner active></paper-spinner>
+                <paper-spinner active></paper-spinner>
+                <paper-button><iron-icon icon="check"></iron-icon>link</paper-button>
+                <paper-button raised><iron-icon icon="file-download"></iron-icon>raised</paper-button>
+                <paper-button toggles raised><iron-icon icon="favorite"></iron-icon>toggles</paper-button>
+                <paper-button disabled><iron-icon icon="block"></iron-icon>disabled</paper-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </iron-list>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'super-googles-app',
+
+      properties: {
+        data: {
+          type: Array,
+          observer: 'dataChanged'
+        },
+      },
+      dataChanged: function (newData, oldData) {
+        console.log(newData)
+      },
+      attached: function() {
+        this.$.list.scrollTarget = this.ownerDocument.documentElement;
+      },
+      getClassForItem: function(item, selected) {
+        return selected ? 'item expanded' : 'item';
+      }
+    });
+  </script>
+</dom-module>

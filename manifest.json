@@ -1,0 +1,7 @@
+{
+  "name": "super-googles",
+  "short_name": "super-googles",
+  "description": "POC: infinite scrolling, firebase backend, expandable rows",
+  "start_url": "/",
+  "display": "standalone"
+}
